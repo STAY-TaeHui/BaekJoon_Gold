@@ -3,6 +3,8 @@ package com.company.괄호제거_2800;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -21,12 +23,38 @@ public class Main
     static BufferedReader br = null;
     static StringBuilder sb = null;
     static Stack<Integer> stk = null;
+    static Set<String> set =new HashSet<>();
+    static boolean[] check = null;
 
     static String str = null;
     static int[] pair = null;
+    public static void dfs(int deptNow, int dept) {
+        if(deptNow == dept) {
+            set.add(sb.toString());
+            return;
+        }
 
+        char ch = str.charAt(deptNow);
+        if(ch == '(') {
+            check[deptNow] = true;
+            dfs(deptNow+1, dept);  // 해당 쌍의 괄호를 지우는 경우
+            check[deptNow] = false;
+        }
+
+        if(ch == ')' && check[pair[deptNow]]) {  // 나와 쌍인 '('가 지워져있는지 체크
+            check[deptNow] = true;  // 사실 이어져있는 괄호 쌍은 하나뿐이라 여기서 굳이 check 건드릴 필요는 없긴 함
+            dfs(deptNow+1, dept);
+            check[deptNow] = false;
+        }else {  // 괄호 안 지우는 경우 or 숫자일 경우
+            sb.append(ch);
+            dfs(deptNow+1, dept);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
     public static void main(String[] args) throws IOException
     {
+//        1. (2+(2*2)+2)
+//        2. (1+(2*(3+4)))
         br = new BufferedReader(new InputStreamReader(System.in));
         sb = new StringBuilder();
         stk = new Stack<>();
@@ -34,6 +62,7 @@ public class Main
         str = br.readLine();
         int len = str.length();
         pair = new int[len];
+        check = new boolean[len];
 
         for(int i=0; i<len; i++){
             char ch = str.charAt(i);
@@ -46,6 +75,8 @@ public class Main
                 stk.pop();
             }
         }
+        dfs(0,len);
+        System.out.println(pair.toString());
 
     }
 }
