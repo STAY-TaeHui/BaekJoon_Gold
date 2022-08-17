@@ -21,6 +21,7 @@ public class Main
     static StringBuilder sb = null;
     static StringTokenizer virusLine = null;
     static int[][] adjArray = null;
+    static LinkedList<Integer>[] adjList = null;
     static boolean[] check = null;
     static int count=1;
 
@@ -30,8 +31,9 @@ public class Main
         int computerCount = Integer.parseInt(br.readLine());
         int commandCount = Integer.parseInt(br.readLine());
 
-        resultByAdjArray(computerCount, commandCount);
-//        resultByLinkedList(computerCount,commandCount);
+//        resultByStack(computerCount, commandCount);
+//        resultByAdjArray(computerCount, commandCount);
+        resultByLinkedList(computerCount,commandCount);
 
     }
 
@@ -47,22 +49,23 @@ public class Main
             adjArray[a][b] = 1;
             adjArray[b][a] = 1;
         }
-        dfs(adjArray,1);
-
         printLine(computerCount);
+
+        dfs_recursive(adjArray,1);
+
         System.out.println(count);
     }
-    private static void dfs(int[][] adjArray, int computer){
+    private static void dfs_recursive(int[][] adjArray, int computer){
         System.out.println("computer : " + computer);
+        if(check[computer])return;
+
         check[computer]=true;
         for(int i=1; i<adjArray[0].length;i++){
-            if(!check[i]){
                 if(adjArray[computer][i] == 1){
                     count++;
                     System.out.println("count : " + count);
-                    dfs(adjArray,i);
+                    dfs_recursive(adjArray,i);
                 }
-            }
         }
     }
 
@@ -78,8 +81,43 @@ public class Main
         }
     }
 
-    private static void resultByLinkedList(int computerCount, int commandCount)
+    private static void resultByLinkedList(int computerCount, int commandCount) throws IOException
     {
+        adjList = new LinkedList[computerCount+1];
+        for(int i=0; i<=computerCount; i++){
+            adjList[i] = new LinkedList<>();
+        }
 
+        for(int i=0; i<commandCount; i++){
+            virusLine = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(virusLine.nextToken());
+            int b = Integer.parseInt(virusLine.nextToken());
+            adjList[a].add(b);
+            adjList[b].add(a);
+        }
+        check = new boolean[computerCount+1];
+        /*Stack 시작*/
+
+        Stack<Integer> stack = new Stack<>();
+
+        stack.push(1);
+
+        int count=-1;
+        while(stack.size()>0){
+            int index=stack.pop();
+            if(check[index])continue;
+            check[index]=true;
+            count++;
+
+            for (Integer computer : adjList[index])
+            {
+                if(check[computer]){
+                    continue;
+                }
+                stack.push(computer);
+            }
+        }
+        System.out.println(count);
     }
+
 }
