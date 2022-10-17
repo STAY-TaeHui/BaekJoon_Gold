@@ -1,4 +1,4 @@
-package com.company.바이러스_2606;
+package com.silver.바이러스_2606;
 
 import java.io.BufferedReader;
 import java.io.IOException;

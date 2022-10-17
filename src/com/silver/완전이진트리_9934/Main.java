@@ -1,4 +1,4 @@
-package com.company.완전이진트리_9934;
+package com.silver.완전이진트리_9934;
 
 import java.io.BufferedReader;
 import java.io.IOException;
