@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
-import java.util.Vector;
+import java.util.stream.Stream;
 
 /*
 https://www.acmicpc.net/problem/2800
@@ -28,29 +28,7 @@ public class Main
 
     static String str = null;
     static int[] pair = null;
-    public static void dfs(int deptNow, int dept) {
-        if(deptNow == dept) {
-            set.add(sb.toString());
-            return;
-        }
 
-        char ch = str.charAt(deptNow);
-        if(ch == '(') {
-            check[deptNow] = true;
-            dfs(deptNow+1, dept);  // 해당 쌍의 괄호를 지우는 경우
-            check[deptNow] = false;
-        }
-
-        if(ch == ')' && check[pair[deptNow]]) {  // 나와 쌍인 '('가 지워져있는지 체크
-            check[deptNow] = true;  // 사실 이어져있는 괄호 쌍은 하나뿐이라 여기서 굳이 check 건드릴 필요는 없긴 함
-            dfs(deptNow+1, dept);
-            check[deptNow] = false;
-        }else {  // 괄호 안 지우는 경우 or 숫자일 경우
-            sb.append(ch);
-            dfs(deptNow+1, dept);
-            sb.deleteCharAt(sb.length() - 1);
-        }
-    }
     public static void main(String[] args) throws IOException
     {
 //        1. (2+(2*2)+2)
@@ -76,7 +54,35 @@ public class Main
             }
         }
         dfs(0,len);
-        System.out.println(pair.toString());
+        set.remove(str);
+        Stream<String> sorted = set.stream().sorted();
+        sorted.forEach(System.out::println);
 
+    }
+
+    static void dfs(int point, int len)
+    {
+        if(point==len){
+            set.add(sb.toString());
+            return;
+        }
+
+        char ch = str.charAt(point);
+        if('('==ch){
+            check[point] = true;
+            dfs(point+1,len);
+            check[point] = false;
+
+        }
+
+        if(')'==ch && check[pair[point]]){
+            dfs(point+1, len);
+        }
+        else {
+            sb.append(ch);
+            dfs(point+1,len);
+            sb.deleteCharAt(sb.length()-1);
+
+        }
     }
 }
