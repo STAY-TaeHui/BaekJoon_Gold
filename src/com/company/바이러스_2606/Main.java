@@ -15,6 +15,7 @@ import java.util.*;
 5 6
 4 7
 * */
+//https://www.acmicpc.net/problem/2606
 public class Main
 {
     static BufferedReader br = null;
@@ -22,7 +23,7 @@ public class Main
     static StringTokenizer virusLine = null;
     static int[][] adjArray = null;
     static boolean[] check = null;
-    static int count=1;
+    static int count=0;
 
     public static void main(String[] args) throws IOException
     {
@@ -31,7 +32,8 @@ public class Main
         int commandCount = Integer.parseInt(br.readLine());
 
         resultByAdjArray(computerCount, commandCount);
-//        resultByLinkedList(computerCount,commandCount);
+        System.out.println(count);
+
 
     }
 
@@ -49,37 +51,18 @@ public class Main
         }
         dfs(adjArray,1);
 
-        printLine(computerCount);
-        System.out.println(count);
     }
     private static void dfs(int[][] adjArray, int computer){
-        System.out.println("computer : " + computer);
+        if(check[computer])return;
+
         check[computer]=true;
         for(int i=1; i<adjArray[0].length;i++){
             if(!check[i]){
                 if(adjArray[computer][i] == 1){
                     count++;
-                    System.out.println("count : " + count);
                     dfs(adjArray,i);
                 }
             }
         }
-    }
-
-    private static void printLine(int computerCount)
-    {
-        for (int i = 0; i <= computerCount; i++)
-        {
-            for (int j = 0; j <= computerCount; j++)
-            {
-                System.out.print(adjArray[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    private static void resultByLinkedList(int computerCount, int commandCount)
-    {
-
     }
 }
