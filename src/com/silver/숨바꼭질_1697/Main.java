@@ -26,22 +26,44 @@ public class Main {
 
          N= Integer.parseInt(st.nextToken());
          K= Integer.parseInt(st.nextToken());
-        int dist = Math.abs(N - K);
 
-        bfs(N);
+
+        if(N>=K){
+            System.out.println(N-K);
+        }
+        else
+            System.out.println(bfs(N));
     }
 
-    private static void bfs(int n) {
+    private static int bfs(int n) {
         Queue<Integer> q = new LinkedList<>();
         q.add(n);
         check[n]=1;
 
         while(!q.isEmpty()){
             int X = q.poll();
-
+            for(int i=0; i<3; i++){
+                int next;
+                if(i==0){
+                    next = X-1;
+                }
+                else if(i==1){
+                    next=X+1;
+                }
+                else{
+                    next=X*2;
+                }
+                if (next == K) {
+                    return check[X];
+                }
+                if(next>=0 && next<100001 && check[next]==0){
+                    check[next] = check[X]+1;
+                    q.add(next);
+                }
+            }
 
         }
 
-
+return 0;
     }
 }
