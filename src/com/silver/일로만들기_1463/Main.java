@@ -6,35 +6,32 @@ import java.io.InputStreamReader;
 
 //https://www.acmicpc.net/problem/1463
 public class Main {
+    static Integer[] dp;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        long x = Long.parseLong(br.readLine());
-        long count=0;
-        while(x!=1){
-            System.out.print(x + " " );
+        int x = Integer.parseInt(br.readLine());
 
-            if(x>=3) {
-                if (x % 3 != 0) {
-                    long trash = x % 3;
-                    x = x - trash;
-                    count += trash;
-                    if(trash>1)
-                    System.out.print(" * ");
-                    continue;
-                } else if (x % 3 == 0) {
-                    x = x / 3;
-                }
-            }
-            else if (x % 2 == 0 && x>=2) {
-                x=x/2;
+        dp = new Integer[x+1];
+        dp[0] = dp[1] = 0;
+
+        System.out.println(recursive(x));
+
+    }
+    static int recursive(int x){
+        if(dp[x] == null){
+            //6으로 나눠질때
+            if(x%6==0){
+                dp[x] = Math.min(recursive(x-1),Math.min(recursive(x/3),recursive(x/2)))+1;
+            } else if (x % 3 == 0) {
+                dp[x] = Math.min(recursive(x/3),recursive(x-1))+1;
+            } else if (x % 2 == 0) {
+                dp[x] = Math.min(recursive(x/2),recursive(x-1))+1;
             }
             else{
-                x-=1;
+                dp[x] = recursive(x-1)+1;
             }
-            count++;
         }
-        System.out.print(1);
-        System.out.println();
-        System.out.println("count = " + count);
+        return dp[x];
     }
 }
