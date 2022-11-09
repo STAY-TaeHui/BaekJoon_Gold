@@ -34,4 +34,10 @@ public class Main {
         }
         return dp[x];
     }
+    static int recursive2(int x, int count){
+        if (x < 2) {
+            return count;
+        }
+        return Math.min(recursive2(x/2, count+1+(x%2)),recursive2(x/3, count+1+(x%3)));
+    }
 }
