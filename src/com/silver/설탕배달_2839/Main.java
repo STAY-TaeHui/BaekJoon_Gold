@@ -10,27 +10,30 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int kg = Integer.parseInt(br.readLine());
-        dp = new Integer[kg];
+        dp = new Integer[kg+1];
         dp[0]=dp[1]=dp[2]=-1;
 
         System.out.println(recur(kg));
     }
-    static int recur(int kg){
+    static int recur(int kg)
+    {
+
         if (dp[kg] == null)
         {
             if (kg % 5 == 0)
             {
-                recur(kg-5);
+                dp[kg] = recur(kg - 5);
             }
             else if (kg % 3 == 0)
             {
-                dp[kg]=recur(kg-3);
+                dp[kg] = recur(kg - 3);
             }
-            int min = Math.min(kg % 5, kg % 3);
+            else
+            {
+                dp[kg] = Math.max(recur(kg - 5), recur(kg - 3));
+            }
         }
-        else
-            return dp[kg];
-
+        return dp[kg];
 
     }
 }
